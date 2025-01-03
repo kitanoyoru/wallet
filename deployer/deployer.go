@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
+	gethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethclient"
+
 	contracts "github.com/kitanoyoru/wallet/contracts/gen"
-	"github.com/kitanoyoru/wallet/pkg/blockchain"
+	"github.com/kitanoyoru/wallet/pkg/blockchain/common"
+	ethcontext "github.com/kitanoyoru/wallet/pkg/blockchain/context"
 )
 
 func New() *Deployer {
@@ -16,13 +17,15 @@ func New() *Deployer {
 }
 
 type Deployer struct {
-	address  common.Address
-	tx       *types.Transaction
+	address  gethcommon.Address
 	contract *contracts.Contracts
+	tx       *types.Transaction
 }
 
-func (d *Deployer) Deploy(ctx context.Context, client *ethclient.Client) error {
-	signer, err := blockchain.GetSigner(ctx, client)
+func (d *Deployer) Deploy(ctx context.Context) error {
+	client := ethcontext.FromContext(ctx)
+
+	signer, err := common.GetSigner(ctx, client)
 	if err != nil {
 		return err
 	}
@@ -38,8 +41,8 @@ func (d *Deployer) Deploy(ctx context.Context, client *ethclient.Client) error {
 	}
 
 	d.address = address
-	d.tx = tx
 	d.contract = contract
+	d.tx = tx
 
 	return nil
 }

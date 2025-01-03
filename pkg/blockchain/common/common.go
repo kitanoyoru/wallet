@@ -1,4 +1,4 @@
-package common 
+package common
 
 import (
 	"context"
@@ -12,7 +12,9 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/params"
+
 	"github.com/kitanoyoru/wallet/config"
+	contracts "github.com/kitanoyoru/wallet/contracts/gen"
 )
 
 var (
@@ -37,9 +39,9 @@ func ValidateContractAddress(ctx context.Context, client *ethclient.Client, addr
 	return ErrInvalidContractAddress
 }
 
-// getSigner get the signer for sign transactions
+// GetSigner get the signer for sign transactions
 func GetSigner(ctx context.Context, client *ethclient.Client) (*bind.TransactOpts, error) {
-	privateKey, err := crypto.HexToECDSA(config.App.Blockchain.PrivateKey)
+	privateKey, err := crypto.HexToECDSA(config.Blockchain.PrivateKey)
 	if err != nil {
 		return nil, err
 	}
@@ -63,11 +65,39 @@ func GetSigner(ctx context.Context, client *ethclient.Client) (*bind.TransactOpt
 	}
 
 	signer.Nonce = big.NewInt(int64(nonce))
-	signer.Value = big.NewInt(config.App.Contract.WeiFounds)
-	signer.GasLimit = uint64(config.App.Contract.GasLimit)
-	signer.GasPrice = big.NewInt(config.App.Contract.GasPrice)
+	signer.Value = big.NewInt(config.Contract.WeiFounds)
+	signer.GasLimit = uint64(config.Contract.GasLimit)
+	signer.GasPrice = big.NewInt(config.Contract.GasPrice)
 
 	return signer, nil
+}
+
+func GetContract(ctx context.Context, client *ethclient.Client, contractAddress string) (*contracts.Contracts, error) {
+	err := ValidateContractAddress(ctx, client, contractAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	contract, err := contracts.NewContracts(common.HexToAddress(contractAddress), client)
+	if err != nil {
+		return nil, err
+	}
+
+	return contract, nil
+} 
+
+func GetOwner(ctx context.Context, client *ethclient.Client, contractAddress string) (*common.Address, error) {
+	contract, err := GetContract(ctx, client, contractAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	ownerAddress, err := contract.Owner(&bind.CallOpts{Context: ctx, Pending: false})
+	if err != nil {
+		return nil, err
+	}
+
+	return &ownerAddress, nil
 }
 
 // validateAddress validate address format

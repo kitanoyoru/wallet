@@ -4,16 +4,16 @@ import (
 	"context"
 
 	gethcommon "github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"golang.org/x/sync/errgroup"
 
 	contracts "github.com/kitanoyoru/wallet/contracts/gen"
 	"github.com/kitanoyoru/wallet/pkg/blockchain/common"
+	ethcontext "github.com/kitanoyoru/wallet/pkg/blockchain/context"
 )
 
 type Watcher func(ctx context.Context, contract *contracts.Contracts) error
 
-func NewMonitor(address string, watchers ...Watcher) *Monitor {
+func New(address string, watchers ...Watcher) *Monitor {
 	return &Monitor{
 		address,
 		watchers,
@@ -25,7 +25,9 @@ type Monitor struct {
 	watchers []Watcher
 }
 
-func (m *Monitor) Start(ctx context.Context, client *ethclient.Client) error {
+func (m *Monitor) Start(ctx context.Context) error {
+	client := ethcontext.FromContext(ctx)
+
 	err := common.ValidateContractAddress(ctx, client, m.address)
 	if err != nil {
 		return err

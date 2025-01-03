@@ -15,7 +15,7 @@ const (
 
 var (
 	Blockchain BlockchainConfig
-	Conctract  ContractConfig
+	Contract  ContractConfig
 )
 
 // BlockchainConfig struct
@@ -54,7 +54,7 @@ func init() {
 		log.Fatal().Err(err).Send()
 	}
 
-	err = v.Unmarshal(&Conctract)
+	err = v.Unmarshal(&Contract)
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
