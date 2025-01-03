@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/ethereum/go-ethereum v1.14.12
 	github.com/rs/zerolog v1.33.0
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	golang.org/x/sync v0.10.0
 )
@@ -28,7 +28,7 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/holiman/uint256 v1.3.1 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
