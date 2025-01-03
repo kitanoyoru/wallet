@@ -1,0 +1,55 @@
+[linters]
+enable = [
+    "contextcheck",
+    "decorder",
+    "dupword",
+    "durationcheck",
+    "errcheck",
+    "errorlint",
+    "gocognit",
+    "goconst",
+    "gocritic",
+    "gocyclo",
+    "godot",
+    "gofumpt",
+    "goimports",
+    "gosec",
+    "gosimple",
+    "govet",
+    "inamedparam",
+    "ineffassign",
+    "ireturn",
+    "lll",
+    "mnd",
+    "nlreturn",
+    "nolintlint",
+    "nonamedreturns",
+    "revive",
+    "staticcheck",
+    "tagalign",
+    "typecheck",
+    "unconvert",
+    "unused",
+]
+
+[linters-settings]
+errcheck = { exclude-functions = [] }
+
+gocyclo = { min-complexity = 16 }
+lll = { line-length = 180 }
+
+gosec = { excludes = ["G112"] }
+
+[run]
+timeout = "5m"
+
+[issues]
+exclude-rules = [
+    { path = "_test.go", linters = [
+        "dupl",
+        "gosec",
+        "goconst",
+        "lll",
+    ] },
+]
+exclude-generated = "lax"
