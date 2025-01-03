@@ -1,35 +1,22 @@
 package config
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
-	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 )
 
-// environmentPrefix prefix used to avoid environment variable names collisions
-const environmentPrefix = "SW"
+const (
+	filename = "config"
+	filetype = "yaml"
+	filepath = "./config"
+)
 
 var (
-	// Filename configuration file name.
-	Filename string
-	// App configuration struct
-	App AppConfig
-
-	// environmentVarList list of environment variables read by the app. The name should match with a struct field.
-	// The dots will be replaced by underscores, it will be capitalized and the environmentPrefix will be added
-	// 		i.e.: blockchain.pk => SW_BLOCKCHAIN_PK
-	environmentVarList = []string{
-		"blockchain.pk",
-	}
-)
-
-// AppConfig struct
-type AppConfig struct {
 	Blockchain BlockchainConfig
-	Contract   ContractConfig
-}
+	Conctract  ContractConfig
+)
 
 // BlockchainConfig struct
 type BlockchainConfig struct {
@@ -48,38 +35,32 @@ type ContractConfig struct {
 	WeiFounds int64  `mapstructure:"default_wei_founds"`
 }
 
-// Setup bind command flags and environment variables
-// The precedence to override a configuration is: flag -> environment variable -> configuration field
-func Setup(cmd *cobra.Command, _ []string) error {
+func init() {
 	v := viper.New()
-	v.SetConfigFile(Filename)
-	v.SetConfigType("yaml")
-	v.AddConfigPath("./config")
 
-	v.SetEnvPrefix(environmentPrefix)
-	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	v.SetConfigFile(filename)
+	v.SetConfigType(filetype)
+	v.AddConfigPath(filepath)
+
 	v.AutomaticEnv()
 
 	err := v.ReadInConfig()
 	if err != nil {
-		return err
+		log.Fatal().Err(err).Send()
 	}
 
-	cmd.Flags().VisitAll(func(flag *pflag.Flag) {
-		_ = v.BindPFlag(flag.Name, cmd.Flags().Lookup(flag.Name))
-	})
-	for _, env := range environmentVarList {
-		_ = v.BindPFlag(env, cmd.Flags().Lookup(env))
-	}
-
-	err = v.Unmarshal(&App)
+	err = v.Unmarshal(&Blockchain)
 	if err != nil {
-		return err
-	}
-	App.Blockchain.TimeoutIn, err = time.ParseDuration(App.Blockchain.Timeout)
-	if err != nil {
-		return err
+		log.Fatal().Err(err).Send()
 	}
 
-	return nil
+	err = v.Unmarshal(&Conctract)
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
+	Blockchain.TimeoutIn, err = time.ParseDuration(Blockchain.Timeout)
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
 }

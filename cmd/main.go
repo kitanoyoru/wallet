@@ -1,41 +1,24 @@
 package main
 
 import (
-	"context"
-	"log"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
-	"dApp/cmd/command"
+	"github.com/kitanoyoru/wallet/cmd/deploy"
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
 )
 
-const closeFallbackTime = 3
+const AppName = "wallet"
 
-func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt, syscall.SIGHUP, syscall.SIGTERM)
-	defer func() {
-		log.Println("closing application")
-		signal.Stop(signals)
-		cancel()
-	}()
-
-	go func() {
-		<-signals
-		log.Println("propagating cancel signal")
-		cancel()
-		time.Sleep(closeFallbackTime * time.Second)
-		log.Println("fallback exit")
-		os.Exit(1)
-	}()
-
-	cmd := command.NewRootCommand(ctx)
-	if err := cmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+var rootCmd = &cobra.Command{
+	Short: AppName,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return cmd.Help()
+	},
 }
 
+func main() {
+	rootCmd.AddCommand(deploy.Command())
+
+	if err := rootCmd.Execute(); err != nil {
+		log.Fatal().Err(err).Send()
+	}
+}
