@@ -6,6 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	gethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/pkg/errors"
 
 	"github.com/kitanoyoru/wallet/pkg/blockchain/common"
 	ethcontext "github.com/kitanoyoru/wallet/pkg/blockchain/context"
@@ -41,11 +42,13 @@ func TransferOwner(ctx context.Context, contractAddress, targetAddress string) e
 	}
 
 	receipt, err := bind.WaitMined(ctx, client, tx)
-	if receipt.Status != types.ReceiptStatusSuccessful || err != nil {
+	if err != nil {
 		return err
 	}
 
-	// process transaction
+	if receipt.Status != types.ReceiptStatusSuccessful {
+		return errors.New("receipt status is not successful")
+	}
 
 	return nil
 }
