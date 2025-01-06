@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
+
 	"github.com/kitanoyoru/wallet/cmd/balance"
 	"github.com/kitanoyoru/wallet/cmd/deploy"
 	"github.com/kitanoyoru/wallet/cmd/monitor"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/cobra"
+	"github.com/kitanoyoru/wallet/cmd/transfers"
 )
-
-const AppName = "wallet"
 
 var rootCmd = &cobra.Command{
 	Use:   "wallet",
@@ -22,6 +22,7 @@ func main() {
 	rootCmd.AddCommand(deploy.Command())
 	rootCmd.AddCommand(balance.Command())
 	rootCmd.AddCommand(monitor.Command())
+	rootCmd.AddCommand(transfers.Command())
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal().Err(err).Send()

@@ -6,12 +6,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/spf13/cobra"
 	"github.com/ethereum/go-ethereum/ethclient"
+
 	"github.com/kitanoyoru/wallet/config"
 	"github.com/kitanoyoru/wallet/monitor"
 	"github.com/kitanoyoru/wallet/monitor/events"
 	ethcontext "github.com/kitanoyoru/wallet/pkg/blockchain/context"
-	"github.com/spf13/cobra"
 )
 
 func Command() *cobra.Command {
