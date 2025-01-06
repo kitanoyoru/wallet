@@ -20,7 +20,7 @@ type OwnershipTransferred struct {
 	Timestamp     time.Time `json:"timestamp"`
 }
 
-func WatchOwnershipTransferred(ctx context.Context, contract contracts.Contracts) error {
+func WatchOwnershipTransferred(ctx context.Context, contract *contracts.Contracts) error {
 	events := make(chan *contracts.ContractsOwnershipTransferred)
 	opts := &bind.WatchOpts{
 		Context: ctx,

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/kitanoyoru/wallet/cmd/balance"
 	"github.com/kitanoyoru/wallet/cmd/deploy"
+	"github.com/kitanoyoru/wallet/cmd/monitor"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,7 @@ var rootCmd = &cobra.Command{
 func main() {
 	rootCmd.AddCommand(deploy.Command())
 	rootCmd.AddCommand(balance.Command())
+	rootCmd.AddCommand(monitor.Command())
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal().Err(err).Send()
