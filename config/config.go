@@ -15,7 +15,7 @@ const (
 
 var (
 	Blockchain BlockchainConfig
-	Contract  ContractConfig
+	Contract   ContractConfig
 )
 
 // BlockchainConfig struct

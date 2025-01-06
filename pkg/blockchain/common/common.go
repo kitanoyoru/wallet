@@ -84,7 +84,7 @@ func GetContract(ctx context.Context, client *ethclient.Client, contractAddress 
 	}
 
 	return contract, nil
-} 
+}
 
 func GetOwner(ctx context.Context, client *ethclient.Client, contractAddress string) (*common.Address, error) {
 	contract, err := GetContract(ctx, client, contractAddress)

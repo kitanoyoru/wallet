@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/rs/zerolog/log"
 
 	contracts "github.com/kitanoyoru/wallet/contracts/gen"
 )
