@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/kitanoyoru/wallet/cmd/balance"
 	"github.com/kitanoyoru/wallet/cmd/deploy"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -9,7 +10,8 @@ import (
 const AppName = "wallet"
 
 var rootCmd = &cobra.Command{
-	Short: AppName,
+	Use:   "wallet",
+	Short: "Run the wallet CLI",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return cmd.Help()
 	},
@@ -17,6 +19,7 @@ var rootCmd = &cobra.Command{
 
 func main() {
 	rootCmd.AddCommand(deploy.Command())
+	rootCmd.AddCommand(balance.Command())
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal().Err(err).Send()
