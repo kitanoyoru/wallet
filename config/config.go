@@ -1,16 +1,10 @@
 package config
 
 import (
+	"log"
 	"time"
 
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
-)
-
-const (
-	filename = "config"
-	filetype = "yaml"
-	filepath = "./config"
+	"github.com/caarlos0/env/v8"
 )
 
 var (
@@ -18,49 +12,31 @@ var (
 	Contract   ContractConfig
 )
 
-// BlockchainConfig struct
 type BlockchainConfig struct {
-	Address    string `mapstructure:"address"`
-	WS         string `mapstructure:"ws"`
-	PrivateKey string `mapstructure:"pk"`
-	Timeout    string `mapstructure:"timeout"`
-	TimeoutIn  time.Duration
+	Address    string        `env:"BLOCKCHAIN_ADDRESS,required"`
+	WS         string        `env:"BLOCKCHAIN_WS,required"`
+	PrivateKey string        `env:"BLOCKCHAIN_PK,required"`
+	Timeout    time.Duration `env:"BLOCKCHAIN_TIMEOUT" envDefault:"1s"`
 }
 
-// ContractConfig struct
 type ContractConfig struct {
-	Address   string `mapstructure:"address"`
-	GasLimit  int64  `mapstructure:"gas_limit"`
-	GasPrice  int64  `mapstructure:"gas_price"`
-	WeiFounds int64  `mapstructure:"default_wei_founds"`
+	Address   string `env:"CONTRACT_ADDRESS,required"`
+	GasLimit  int64  `env:"CONTRACT_GAS_LIMIT" envDefault:"3000000"`
+	GasPrice  int64  `env:"CONTRACT_GAS_PRICE" envDefault:"1000000"`
+	WeiFounds int64  `env:"CONTRACT_DEFAULT_WEI_FUNDS" envDefault:"0"`
 }
+
+var ConfigInstance Config
 
 func init() {
-	v := viper.New()
-
-	v.SetConfigFile(filename)
-	v.SetConfigType(filetype)
-	v.AddConfigPath(filepath)
-
-	v.AutomaticEnv()
-
-	err := v.ReadInConfig()
+	err := env.Parse(&ConfigInstance.Blockchain)
 	if err != nil {
-		log.Fatal().Err(err).Send()
+		log.Fatalf("Failed to parse blockchain config: %v", err)
 	}
 
-	err = v.Unmarshal(&Blockchain)
+	err = env.Parse(&ConfigInstance.Contract)
 	if err != nil {
-		log.Fatal().Err(err).Send()
-	}
-
-	err = v.Unmarshal(&Contract)
-	if err != nil {
-		log.Fatal().Err(err).Send()
-	}
-
-	Blockchain.TimeoutIn, err = time.ParseDuration(Blockchain.Timeout)
-	if err != nil {
-		log.Fatal().Err(err).Send()
+		log.Fatalf("Failed to parse contract config: %v", err)
 	}
 }
+

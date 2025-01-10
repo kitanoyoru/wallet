@@ -7,9 +7,9 @@ GEN_DIR = gen
 
 GO_PKG = contracts 
 
-CONTRACTS      = $(CONTRACTS_DIR)/Wallet.sol $(CONTRACTS_DIR)/Allowance.sol
-COMPILED_FILES = $(BUILD_DIR)/Wallet.json $(BUILD_DIR)/Allowance.json
-GO_FILES       = $(GEN_DIR)/Wallet.go $(GEN_DIR)/Allowance.go
+CONTRACTS      = $(CONTRACTS_DIR)/Wallet.sol
+COMPILED_FILES = $(BUILD_DIR)/Wallet.json
+GO_FILES       = $(GEN_DIR)/Wallet.go
 
 all: $(COMPILED_FILES) $(GO_FILES)
 
