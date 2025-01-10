@@ -16,7 +16,7 @@ type BlockchainConfig struct {
 	Address    string        `env:"BLOCKCHAIN_ADDRESS,required"`
 	WS         string        `env:"BLOCKCHAIN_WS,required"`
 	PrivateKey string        `env:"BLOCKCHAIN_PK,required"`
-	Timeout    time.Duration `env:"BLOCKCHAIN_TIMEOUT" envDefault:"1s"`
+	TimeoutIn    time.Duration `env:"BLOCKCHAIN_TIMEOUT" envDefault:"1s"`
 }
 
 type ContractConfig struct {
@@ -26,15 +26,13 @@ type ContractConfig struct {
 	WeiFounds int64  `env:"CONTRACT_DEFAULT_WEI_FUNDS" envDefault:"0"`
 }
 
-var ConfigInstance Config
-
 func init() {
-	err := env.Parse(&ConfigInstance.Blockchain)
+	err := env.Parse(&Blockchain)
 	if err != nil {
 		log.Fatalf("Failed to parse blockchain config: %v", err)
 	}
 
-	err = env.Parse(&ConfigInstance.Contract)
+	err = env.Parse(&Contract)
 	if err != nil {
 		log.Fatalf("Failed to parse contract config: %v", err)
 	}
