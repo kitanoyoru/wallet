@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/kitanoyoru/wallet/cmd/balance"
-	"github.com/kitanoyoru/wallet/cmd/deploy"
+	"github.com/kitanoyoru/wallet/cmd/create"
 	"github.com/kitanoyoru/wallet/cmd/monitor"
 	"github.com/kitanoyoru/wallet/cmd/transfers"
 )
@@ -19,7 +19,7 @@ var rootCmd = &cobra.Command{
 }
 
 func main() {
-	rootCmd.AddCommand(deploy.Command())
+	rootCmd.AddCommand(create.Command())
 	rootCmd.AddCommand(balance.Command())
 	rootCmd.AddCommand(monitor.Command())
 	rootCmd.AddCommand(transfers.Command())

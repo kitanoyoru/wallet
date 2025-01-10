@@ -1,4 +1,4 @@
-package deploy
+package create 
 
 import (
 	"context"
@@ -8,22 +8,24 @@ import (
 
 	"github.com/kitanoyoru/wallet/config"
 	"github.com/kitanoyoru/wallet/deployer"
+	ethcontext "github.com/kitanoyoru/wallet/pkg/blockchain/context"
 )
 
-// Command to deploy smart contracts into the blockchain
 func Command() *cobra.Command {
 	return &cobra.Command{
-		Use: "deploy",
+		Use: "create",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx, cancel := context.WithTimeout(context.Background(), config.Blockchain.TimeoutIn)
+			dialCtx, cancel := context.WithTimeout(context.Background(), config.Blockchain.TimeoutIn)
 			defer cancel()
 
-			client, err := ethclient.DialContext(ctx, config.Blockchain.Address)
+			client, err := ethclient.DialContext(dialCtx, config.Blockchain.WS)
 			if err != nil {
 				return err
 			}
 
-			err = deployer.New().Deploy(ctx, client)
+			ctx := ethcontext.WrapToContext(context.Background(), client)
+
+			err = deployer.New().Deploy(ctx)
 			if err != nil {
 				return err
 			}
