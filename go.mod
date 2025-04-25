@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	github.com/caarlos0/env/v8 v8.0.0
-	github.com/ethereum/go-ethereum v1.15.9
+	github.com/ethereum/go-ethereum v1.15.10
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.9.1
