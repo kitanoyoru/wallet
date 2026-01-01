@@ -7,8 +7,8 @@ require (
 	github.com/ethereum/go-ethereum v1.16.7
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.34.0
-	github.com/spf13/cobra v1.10.2
-	golang.org/x/sync v0.18.0
+	github.com/spf13/cobra v1.10.1
+	golang.org/x/sync v0.19.0
 )
 
 require (
