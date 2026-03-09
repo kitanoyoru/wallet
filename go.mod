@@ -1,6 +1,6 @@
 module github.com/kitanoyoru/wallet
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/caarlos0/env/v8 v8.0.0
@@ -8,7 +8,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.10.2
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 )
 
 require (
